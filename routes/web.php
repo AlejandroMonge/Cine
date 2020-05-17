@@ -17,6 +17,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('pelicula', function () {
+    return view('peliculas.peliculaIndex');
+});
+
+/* Route::post('pelicula/store','PeliculaControllerr@store')-> name('pelicula.store'); */
+
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('pelicula', 'PeliculaController');

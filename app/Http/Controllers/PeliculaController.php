@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Comentario;
 use App\Pelicula;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PeliculaController extends Controller
 {
@@ -15,6 +17,8 @@ class PeliculaController extends Controller
     public function index()
     {
         //
+        $peliculas = Pelicula::all();
+        return view('peliculas.peliculaIndex', compact('peliculas'));
     }
 
     /**
@@ -36,6 +40,9 @@ class PeliculaController extends Controller
     public function store(Request $request)
     {
         //
+
+        //dd($request);
+
     }
 
     /**
@@ -47,6 +54,11 @@ class PeliculaController extends Controller
     public function show(Pelicula $pelicula)
     {
         //
+
+        /* $comentarios = Comentario::where('pelicula_id','=', $pelicula->id); */
+        $comentarios = DB::table('comentarios')->where('pelicula_id', '=', $pelicula->id)->get();
+
+        return view('peliculas.peliculaShow', compact('pelicula', 'comentarios'));
     }
 
     /**
