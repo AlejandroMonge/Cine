@@ -1,22 +1,23 @@
 @extends('layouts.tema')
 
+{{-- {{use Illuminate\Support\Facades\DB;}} --}}
+
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-.rating-box h1{
-	margin:0 0 30px;
-	font-size: 40px;
-}
+
 .rating-box .ratings .fa{
-  font-size: 40px;
+  font-size: 30px;
   color:#FF9800;
   float: left;
   cursor: pointer;
 }
 
+.comentarios {
+    background-color: #ABBCC3;
+}
+
 </style>
-
-
 
 <div class="container">
     {{-- {!! Form::open([route('pelicula.store')]) !!} --}}
@@ -47,30 +48,43 @@
         </div>
     </div>
     <div class="row">
-        <div class="rating-box">
-             @isset($comentarios)
-                {{-- <h3>Comentarios: {{count($comentarios)}}</h3> --}}
+        <div class="col-sm-6">
+            <h3>Comentarios: {{count($comentarios)}}</h3>
+            <div class="comentarios">
+                @isset($comentarios)
                 @foreach ($comentarios as $comentario)
                     <h4>{{$comentario->puntaje}}</h4>
                     <p>{{$comentario->comentario}}</p>
-                    {{-- <p>by {{ \App\User::where('id', $comentario->id_usuario)->name }}</p> --}}
+                    <p>{{$comentario->nombre_user}}</p>
                     <p> {{$comentario->created_at}} </p>
                 @endforeach
             @endisset
-
-            <h3>Opinar</h3>
-              <div class="ratings">
-                 <span class="fa fa-star-o"></span>
-                 <span class="fa fa-star-o"></span>
-                 <span class="fa fa-star-o"></span>
-                 <span class="fa fa-star-o"></span>
-                 <span class="fa fa-star-o"></span>
-                </div>
-              <input type="number" id="rating-value">
+            </div>
         </div>
-        {!! Form::textarea("reseña", null, ['rows' => '5', 'class' => 'form-control', 'placeholder' => '¿Que te parecio la pelicula?']) !!}
+
+
     </div>
-    <button type="submit" class="btn btn-warning">Enviar comentario</button>
+    <div class="row">
+        {!! Form::open(['route' => ['comentario.store', $pelicula->id]]) !!}
+        <h3>Opinar</h3>
+        <input type="number" name="pelicula_id" value="{{$pelicula->id}}" hidden>
+        <input type="number" name="user_id" value="{{Auth::id()}}" hidden>
+        <input type="text" name="nombre_user" value="{{Auth::user()->name}}" hidden>
+        <div class="rating-box">
+            <div class="ratings">
+                <span class="fa fa-star-o"></span>
+                <span class="fa fa-star-o"></span>
+                <span class="fa fa-star-o"></span>
+                <span class="fa fa-star-o"></span>
+                <span class="fa fa-star-o"></span>
+            </div>
+        </div>
+        <input name="puntaje" type="number" id="rating-value" hidden>
+        {!! Form::textarea("comentario", null, ['rows' => '5', 'class' => 'form-control', 'placeholder' => '¿Que te parecio la pelicula?']) !!}
+        <button type="submit" class="btn btn-warning">Enviar comentario</button>
+        {!! Form::close() !!}
+    </div>
+
     {{-- {!! Form::close() !!} --}}
 </div>
 @endsection

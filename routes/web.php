@@ -29,3 +29,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('pelicula', 'PeliculaController');
+
+Route::resource('comentario', 'ComentarioController');

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Comentario;
+use App\Pelicula;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Type\Integer;
 
 class ComentarioController extends Controller
 {
@@ -36,6 +38,26 @@ class ComentarioController extends Controller
     public function store(Request $request)
     {
         //
+
+        $request->validate([
+            'comentario' => 'required|max:4294967294',
+            'puntaje' => 'required|max:5|min:0',
+            'user_id' => 'required',
+            'pelicula_id' => 'required'
+
+
+        ]);
+
+        $comentario = new Comentario();
+
+        $comentario->comentario = $request->comentario;
+        $comentario->puntaje = $request->puntaje;
+        $comentario->nombre_user = $request->nombre_user;
+        $comentario->user_id = $request->user_id;
+        $comentario->pelicula_id = $request->pelicula_id;
+        $comentario->save();
+        return redirect()->route('pelicula.show', $request->pelicula_id);
+
     }
 
     /**
